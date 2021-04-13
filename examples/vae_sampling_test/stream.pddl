@@ -1,0 +1,30 @@
+(define (stream vae-test)
+    ;(:stream sample-test
+    ;    :inputs(?o ?r)
+    ;    :domain (and (Object ?o) (Region ?r))
+    ;    :outputs (?test)
+    ;    :certified (Test ?test)
+    ;)
+    ;(:stream sample-pose
+    ;    :inputs (?o ?r)
+    ;    :domain (and (Object ?o) (Region ?r))
+    ;    :outputs (?p)
+    ;    :certified (Supported ?o ?p ?r)
+    ;)
+    (:stream vae-sampler
+        :inputs (?o ?p ?g ?q1 )
+        :domain (and (Object ?o) (Pose ?p) (Grasp ?g) (Conf ?q1) )
+        :outputs (?q2 ?t)
+        :certified (and (Conf ?q2) (Motion ?q1 ?t ?q2)) 
+    )
+    (:stream collision-checker
+        :inputs (?q1 ?t ?q2)
+        :domain (Motion ?q1 ?t ?q2)
+        :certified  (NoCollision ?t)
+    )
+    (:stream grasp-checker
+        :inputs (?o ?p ?g ?q)
+        :domain (and (Object ?o) (Pose ?p) (Grasp ?g) (Conf ?q) )
+        :certified (Kin ?o ?p ?g ?q)
+    )
+)
